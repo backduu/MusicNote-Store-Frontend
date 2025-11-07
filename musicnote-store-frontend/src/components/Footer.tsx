@@ -1,4 +1,7 @@
-export default function Footer() {
+import { Link } from 'react-router-dom';
+import { Music } from 'lucide-react';
+
+export const Footer = () => {
     return (
       <footer className="bg-note-surface border-t border-note-border text-center py-4 text-note-muted">
         <p>© 2025 음표상점. All rights reserved.</p>
@@ -9,5 +12,5 @@ export default function Footer() {
         </div>
       </footer>
     );
-  }
+};
   

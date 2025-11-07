@@ -1,16 +1,11 @@
-import Header from "../components/Header.tsx";
-import Footer from "../components/Footer.tsx";
+export const Home = () => {
 
-export default function Home() {
-    return (
-        <div className="min-h-screen flex flex-col bg-note-bg">
-        <Header />
-        <main className="flex-1 pt-16 px-6">
-
-        <div className="bg-red-500 text-white p-4">Tailwind Test</div>
-
-        </main>
-        <Footer />
-      </div>         
-    )
-}
+  return (
+    <div>
+      <section className=" from-gray-50 to-gray-100 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        </div>
+      </section>
+    </div>
+  );
+};
