@@ -7,13 +7,6 @@ import {UserRole} from '../types/UserRole'
 import { signup } from "../api/user";
 import { UserStatus } from '../types/UserStatus';
 
-/*
-TODO
-1. LOADING 관련 기능 추가
-2. 
-*/
-
-  
 export const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -28,6 +21,7 @@ export const Signup = () => {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'fail' | 'error' } | null>(null);
     const navigate = useNavigate();
     
+    // 회원가입 폼 전송 함수
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -36,7 +30,13 @@ export const Signup = () => {
             setToast({ message: "올바른 이메일 형식이 아닙니다.", type: "fail" });
             return;
         }
-     
+
+        const phoneRegex = /^01[0-9]-?\d{3,4}-?\d{4}$/;
+        if (!phoneRegex.test(phone)) {
+          setToast({ message: "올바른 휴대폰 번호 형식이 아닙니다.", type: "fail" });
+          return;
+        }
+            
         if (password !== confirmPassword) {
             setToast({ message: '비밀번호가 일치하지 않습니다.', type: 'fail' });
             return;
@@ -50,11 +50,13 @@ export const Signup = () => {
          setLoading(true);
 
          try {
-           // signup API 호출
-           await signup({username, nickname, name, email, address, phone, password, role, status: UserStatus.ACTIVE});
+            const normalizedPhone = phone.replace(/-/g, "");
 
-           setToast({ message: '회원가입 성공!', type: 'success' });
-           setTimeout(() => navigate('/'), 1000);
+            // signup API 호출
+            await signup({username, nickname, name, email, address, phone: normalizedPhone, password, role, status: UserStatus.ACTIVE});
+
+            setToast({ message: '회원가입 성공!', type: 'success' });
+            setTimeout(() => navigate('/'), 1000);
         } catch (error : unknown) {
             console.error(error);
             if (error instanceof AxiosError) {
@@ -73,6 +75,18 @@ export const Signup = () => {
         }        
     };
 
+    // 휴대폰 번호 포매팅 함수
+    const formatPhoneNumber = (value: string) => {
+        // 숫자만 추출
+        const onlyNums = value.replace(/\D/g, "");
+    
+        if (onlyNums.length < 4) return onlyNums;
+        if (onlyNums.length < 7) {
+        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
+        }
+        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 7)}-${onlyNums.slice(7, 11)}`;
+    };
+  
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -179,7 +193,7 @@ export const Signup = () => {
                             type="tel"
                             required
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm 
                                         focus:outline-none focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
                             placeholder="010-1234-5678"
@@ -215,7 +229,7 @@ export const Signup = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
-                                placeholder="최소 6자 이상"
+                                placeholder="최소 8자 이상"
                             />
                         </div>
 
