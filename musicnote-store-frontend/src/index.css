@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* --------------------------------------------------
+   CSS 변수 (전역 색상 관리)
+   -------------------------------------------------- */
+:root {
+  --color-note-bg: #f9fafb;       /* 배경 */
+  --color-note-surface: #ffffff;  /* 카드/컨테이너 */
+  --color-note-primary: #4f46e5;  /* 메인 포인트 */
+}
+
+/* --------------------------------------------------
+   Base Typography & Body Reset
+   -------------------------------------------------- */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-note-bg);
+  color: #1f2937; 
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #1f2937; 
+}
+
+p {
+  color: #6b7280; 
+  line-height: 1.75;
+}
+
+/* --------------------------------------------------
+   Utility Classes
+   -------------------------------------------------- */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 카드 공용 스타일 */
+.card {
+  background-color: var(--color-note-surface);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+
+/* 버튼 공용 스타일 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background-color: var(--color-note-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #4338ca; 
+}
+
+/* --------------------------------------------------
+   Scrollbar & Selection
+   -------------------------------------------------- */
+::selection {
+  background-color: var(--color-note-primary);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-note-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-note-primary);
+}
