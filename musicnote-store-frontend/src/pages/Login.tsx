@@ -4,6 +4,7 @@ import { Music } from 'lucide-react';
 import { Toast } from '../components/Toast';
 import { AxiosError } from 'axios';
 import { login } from "../api/auth";
+import { useUserStore } from "../store/userStore";
 
 export const Login = () => {
     const [username, setUsername] = useState('');
@@ -11,16 +12,16 @@ export const Login = () => {
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'fail' | 'error' } | null>(null);
     const navigate = useNavigate();
-
+    const { login: setUserLogin } = useUserStore(); 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
     
         try {
-            await login({username, password});
+            const loginRes = await login({username, password});
+            setUserLogin(loginRes);
 
-            login({username, password});
             setToast({ message: '로그인 성공!', type: 'success' });
             setTimeout(() => navigate('/'), 1000);
         } catch (error : unknown) {
@@ -41,7 +42,7 @@ export const Login = () => {
         }  
     };
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                     <Music className="w-12 h-12 text-[#4f46e5]" />
