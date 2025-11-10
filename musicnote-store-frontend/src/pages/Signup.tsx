@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Music } from 'lucide-react';
+import { Toast } from '../components/Toast';
+import { AxiosError } from 'axios';
+import {UserRole} from '../types/UserRole'
+import { signup } from "../api/user";
+import { UserStatus } from '../types/UserStatus';
 
 /*
 TODO
@@ -8,6 +13,7 @@ TODO
 2. 
 */
 
+  
 export const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,33 +23,54 @@ export const Signup = () => {
     const [username, setUsername] = useState('');
     const [nickname, setNickname] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState<UserRole>('USER');
     const [loading, setLoading] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'fail' | 'error' } | null>(null);
+    const navigate = useNavigate();
     
     const handleSubmit = async (e: React.FormEvent) => {
-       e.preventDefault();
+        e.preventDefault();
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+            setToast({ message: "올바른 이메일 형식이 아닙니다.", type: "fail" });
+            return;
+        }
+     
         if (password !== confirmPassword) {
-            setToast({ message: '비밀번호가 일치하지 않습니다.', type: 'error' });
+            setToast({ message: '비밀번호가 일치하지 않습니다.', type: 'fail' });
             return;
-          }
+        }
       
-          if (password.length < 6) {
-            setToast({ message: '비밀번호는 최소 6자 이상이어야 합니다.', type: 'error' });
+        if (password.length < 6) {
+            setToast({ message: '비밀번호는 최소 6자 이상이어야 합니다.', type: 'fail' });
             return;
-          }
+         }
           
-          setLoading(true);
+         setLoading(true);
 
-          try {
-            const user = await mockApi.signup(email, password, name);
-            login(user);
-            setToast({ message: '회원가입 성공!', type: 'success' });
-            setTimeout(() => navigate('/'), 1000);
-          } catch (error) {
-            setToast({ message: '회원가입에 실패했습니다.', type: 'error' });
-          } finally {
+         try {
+           // signup API 호출
+           await signup({username, nickname, name, email, address, phone, password, role, status: UserStatus.ACTIVE});
+
+           setToast({ message: '회원가입 성공!', type: 'success' });
+           setTimeout(() => navigate('/'), 1000);
+        } catch (error : unknown) {
+            console.error(error);
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 400) {
+                  setToast({ message: '입력값이 올바르지 않습니다.', type: 'fail' });
+                } else if (error.response?.status === 500) {
+                  setToast({ message: '서버 오류가 발생했습니다.', type: 'error' });
+                }
+              } else if (error instanceof Error) {
+                setToast({ message: error.message, type: 'error' });
+              } else {
+                setToast({ message: '알 수 없는 오류가 발생했습니다.', type: 'error' });
+              }                     
+        } finally {
             setLoading(false);
-          }        
+        }        
     };
 
     return (
@@ -83,7 +110,7 @@ export const Signup = () => {
 
                         <div>
                             <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">
-                                아이디
+                                닉네임
                             </label>
                             <input
                                 id="nickname"
@@ -159,6 +186,23 @@ export const Signup = () => {
                             />
                         </div>
 
+                        <div>
+                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                            권한(Role)
+                            </label>
+                            <select
+                            id="role"
+                            required
+                            value={role}
+                            onChange={(e) => setRole(e.target.value as UserRole)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm 
+                                        focus:outline-none focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
+                            >
+                                <option value="USER">사용자</option>
+                                <option value="SELLER">판매자</option>
+                            </select>
+                        </div>
+
 
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -192,13 +236,22 @@ export const Signup = () => {
 
                         <button
                         type="submit"
+                        disabled={loading}
                         className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#6366f1] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                        회원가입
+                        {loading ? '가입 중...' : '회원가입'}
                         </button>                 
                     </form>
                 </div>
             </div>
+
+            {toast && (
+                <Toast 
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };
