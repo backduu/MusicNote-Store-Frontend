@@ -22,15 +22,23 @@ export const Header = () => {
             </Link>
 
             <nav className="hidden md:flex items-center space-x-8">
+              {/* 트렌드/추천 콘텐츠 */}
               <Link to="/hot-tracks" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
                 핫트랙스
               </Link>
-              <Link to="/sound-shop" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
+              {/* 디지털 노래 거래 */}
+              <Link to="/digital-songs" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
                 음원마켓
               </Link>
+              {/* 앨범(피지컬/디지털) 모음 */}
+              <Link to="/albums" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
+                음반 아카이브 
+              </Link>
+              {/* Sheet Music 모음 */}
               <Link to="/scores" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
                 악보 아카이브
               </Link>
+              {/* 고객센터/Q&A */}
               <Link to="/qna" className="text-gray-700 hover:text-[#4f46e5] transition-colors">
                 문의하기
               </Link>
