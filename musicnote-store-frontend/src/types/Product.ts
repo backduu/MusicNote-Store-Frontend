@@ -1,5 +1,5 @@
 import type { ProductType } from '../types/ProductType';
-
+import type { ProductStatus } from './productStatus';
 export interface Items {
     id: number;
     title: string;
@@ -7,8 +7,15 @@ export interface Items {
     price: number;
     type: ProductType;
     creator: string;
-    previewUrl: string; 
+    genre: string;
+    like: string;
+    view: string;
+    previewUrl: string;
+    filePath: string;
+    status: ProductStatus;
+    sellerId: number;
     sellerName: string;
     tags: string[];
-    createdAt: string;
+    createdAt: string;  
+    updatedAt: string;  
 }
