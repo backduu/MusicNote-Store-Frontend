@@ -10,8 +10,8 @@ export async function fetchSongMarket(
     sort: MetricType | "RELEASED" = "LIKE", 
     genre: string | null = null,
     page = 0,
-    size = 25
-
+    size = 25,
+    searchTerm: string | "" = ""
 ): Promise<Items[]> {
     const response = await axiosInstance.get("/products/songMarket", {
         params: {
@@ -22,6 +22,7 @@ export async function fetchSongMarket(
           genre,
           page,
           size,
+          searchTerm
         },
       });
       return response.data;
