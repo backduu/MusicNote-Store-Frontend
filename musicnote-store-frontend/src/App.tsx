@@ -5,7 +5,7 @@ import { Signup } from './pages/Signup';
 import { Login } from "./pages/Login";
 import { Layout } from './components/Layout';
 import { HotTracks } from './pages/HotTracks';
-
+import { SongMarket } from "./pages/SongMarket";
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/hot-tracks" element={<HotTracks />} />
+          <Route path="/song-market" element={<SongMarket />} />
         </Routes>
       </Layout>
 

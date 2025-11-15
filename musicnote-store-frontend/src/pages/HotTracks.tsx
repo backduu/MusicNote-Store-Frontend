@@ -225,8 +225,8 @@ export const HotTracks = () => {
                             </div>
 
                             <div className="flex-0">
-                                <div className="text-2xl font-bold text-gray-900 mb-3">
-                                    ₩{product.price.toLocaleString()}
+                                <div className="text-2xl font-bold text-gray-900 mb-3 min-w-30">
+                                    {/*₩{product.price.toLocaleString()} */}
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <button className="inline-flex items-center justify-center space-x-1 px-3 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#6366f1] transition-colors text-sm font-medium" title="미리 듣기">
@@ -260,7 +260,7 @@ export const HotTracks = () => {
                         </div>
                     </div>
                 ))}
-
+                {filteredProducts.length !== 0 && (
                 <div className="flex justify-center mt-6">
                     <button
                         disabled={isLoading || products.length % size !== 0} 
@@ -270,8 +270,8 @@ export const HotTracks = () => {
                         {isLoading ? "불러오는 중..." : "더보기"}
                     </button>
                 </div>
+            )}
             </div>
-
             {filteredProducts.length === 0 && (
                 <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
                 <Flame className="w-12 h-12 text-gray-300 mx-auto mb-4" />
