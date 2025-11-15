@@ -1,20 +1,25 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { useEffect, useState } from "react";
+import type { ProductResponse } from "../dto/ProductResponse";
+import { MusicalNoteIcon } from '@heroicons/react/24/solid';
+import { fetchGenres } from "../api/genre";
+import { fetchSongMarket } from "../api/songMarket";
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Play, Flame } from "lucide-react";
 import { useCartStore } from '../store/CartStore';
-import { fetchHotTracks } from '../api/hottracks';
 import type { Items } from '../types/Product';
 import type { MetricType } from '../types/MetricType';
 
-export const HotTracks = () => {
-    const { addToCart } = useCartStore();
-    const [filter, setFilter] = useState<'ALL' | 'SONG' | 'ALBUM' | 'SHEET'>('ALL');
-    const [period, setPeriod] = useState<'TODAY' | 'WEEK' | 'MONTH'>('TODAY');
-    const [sort, setSort] = useState<'VIEW' | 'LIKE'>('VIEW');
+export const SongMarket = () => {
+    const [filter, setFilter] = useState<'SONG' | 'ALBUM'>('SONG');
+    const [period, setPeriod] = useState<'TODAY' | 'WEEK' | 'MONTH' | 'YEAR'>('MONTH');
+    const [region, setRegion] = useState<'FOREIGN' | 'Korea'>('Korea'); 
+    const [sort, setSort] = useState<'RELEASED' | 'LIKE' | 'VIEW'>('RELEASED');
+    const [page, setPage] = useState(0); // 페이징 관련 함수
+    const [size, setSize] = useState(15); // 페이징 관련 함수
+    const [genres, setGenres] = useState<string[]>([]);
+    const [genre, setGenre] = useState<string | null>(null);
     const [favorites, setFavorites] = useState<Set<number>>(new Set()); 
-    const [page, setPage] = useState(0);   // 페이징 관리 함수
-    const [size, setSize] = useState(15); // 페이징 관리 함수
-
+  
     // api 데이터, 로딩 및 에러 상태 관리용 함수
     const [products, setProducts] = useState<Items[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,101 +36,110 @@ export const HotTracks = () => {
             return newFavorites;
         });
     };
-    
-    // period, metric 변경 시 api 호출
+
+    // 음악 장르 카테고리 추출 api 호출
+    useEffect(() => {
+        const loadGenres = async () => {
+        try {
+            const data = await fetchGenres(); 
+            setGenres(data);
+          } catch (err) {
+            console.error("장르 불러오기 실패", err);
+          }
+        };
+        loadGenres();
+    }, []);
+
+    // 필터 변경 시 상품 불러오기
     useEffect(() => {
         const loadTracks = async () => {
-            try {
-                setIsLoading(true);
+        try {
+            setIsLoading(true);
 
-                let metric: MetricType = "VIEW";
-                if(sort === "LIKE") {
-                    metric = "LIKE" as MetricType;
-                } 
+            const fetchedProducts = await fetchSongMarket(
+            filter,
+            region,
+            period,
+            sort,
+            genre,
+            page,
+            size
+            );
 
-                const fetchedProducts = await fetchHotTracks(metric, period, page, size);
-                
-                if (page === 0) {
-                    setProducts(fetchedProducts);
-                  } else {
-                    setProducts(prev => [...prev, ...fetchedProducts]);
-                  }
-              
-                setError(null);
-            } catch (err) {
-                setError("데이터를 불러오는 데 실패했습니다.");
-                console.error(err);
-            } finally {
-                setIsLoading(false);
+            if (page === 0) {
+            setProducts(fetchedProducts);
+            } else {
+            setProducts(prev => [...prev, ...fetchedProducts]);
             }
+
+            setError(null);
+        } catch (err) {
+            setError("데이터를 불러오는 데 실패했습니다.");
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
         };
 
         loadTracks();
-    }, [sort, period, page, size]); 
+    }, [sort, period, page, size, region, filter, genre]);
 
-    const filteredProducts = useMemo(() => {
-        if (filter === 'ALL') {
-            return products;
-        }
-        
-        return products.filter(p => p.type === filter);
-        
-    }, [products, filter]); 
 
-    // 로딩 상태 처리
-    if (isLoading) {
+    // 로딩 상태
+    if (isLoading && page === 0) {
         return (
-            <section className="bg-white py-16">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p className="text-lg text-gray-600">로딩 중입니다...</p>
-                </div>
-            </section>
+        <section className="bg-white py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-lg text-gray-600">로딩 중입니다...</p>
+            </div>
+        </section>
         );
     }
 
-    // 에러 상태 처리
+    // 에러 상태
     if (error) {
         return (
-            <section className="bg-white py-16">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p className="text-lg text-red-600">{error}</p>
-                </div>
-            </section>
+        <section className="bg-white py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p className="text-lg text-red-600">{error}</p>
+            </div>
+        </section>
         );
     }
 
+
     return (
-        <section className="bg-white py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center space-x-3 mb-4">
-                    <Flame className="w-8 h-8 text-red-500 animate-pulse" />
-                    <h1 className="text-4xl font-bold text-gray-900">Hot Tracks</h1>
-                </div>
-                <p className="text-lg text-gray-600 mb-8 text-left">
-                    지금 가장 뜨거운 음악들을 만나보세요
-                </p>
+    <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center space-x-3 mb-4">
+                <MusicalNoteIcon className="w-8 h-8 text-teal-500 animate-bounce" />
+                <h1 className="text-4xl font-bold text-gray-900">음원마켓</h1>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+            <p className="text-lg text-gray-600 mb-8 text-left">
+                최신 음원부터 인기 트랙까지, 원하는 음악을 바로 만나보세요
+            </p>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* 타입 */}
+                    {/* 장르(디폴트 국가 - 한국) */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                            카테고리
+                            장르
                         </label>
-                        <div className="flex space-x-2">
-                        {(['ALL', 'SONG', 'ALBUM', 'SHEET'] as const).map((type) => (
-                            <button
-                            key={type}
-                            onClick={() => setFilter(type)}
-                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                filter === type
-                                ? 'bg-[#4f46e5] text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                            >
-                            {type === 'ALL' ? '전체' : type === 'ALBUM' ? '음반' : type === 'SONG' ? '음원' : '악보'}
-                            </button>
-                        ))}
+                        <div className="flex flex-wrap gap-2">
+                            {genres.map((g) => (
+                                <button
+                                key={g}
+                                onClick={() => setGenre(g)}
+                                className={`px-3 py-1 rounded-lg text-sm ${
+                                  genre === g
+                                    ? "bg-indigo-600 text-white"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                }`}
+                              >
+                                {g}                    
+                                </button>
+                            ))}
                         </div>
                     </div>
 
@@ -135,7 +149,7 @@ export const HotTracks = () => {
                             기간
                         </label>
                         <div className="flex space-x-2">
-                            {(['TODAY', 'WEEK', 'MONTH'] as const).map((p) => (
+                            {(['TODAY', 'WEEK', 'MONTH', 'YEAR'] as const).map((p) => (
                             <button
                                 key={p}
                                 onClick={() => setPeriod(p)}
@@ -145,12 +159,12 @@ export const HotTracks = () => {
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
-                                {p === 'TODAY' ? '오늘' : p === 'WEEK' ? '이번 주' : '이번 달'}
+                                {p === 'TODAY' ? '오늘' : p === 'WEEK' ? '이번 주' : p === 'MONTH' ? '이번 달' : '올해'}
                             </button>
                             ))}
                         </div>
                     </div>
-                    
+
                     {/* 정렬 */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
@@ -161,15 +175,59 @@ export const HotTracks = () => {
                             onChange={(e) => setSort(e.target.value as typeof sort)}
                             className="w-full border rounded-lg px-3 py-2 text-sm"
                         >
-                            <option value="VIEW">인기순</option>
+                            <option value="RELEASED">출시순</option>
                             <option value="LIKE">좋아요순</option>
+                            <option value="VIEW">조회수순</option>
                         </select>
+                    </div>
+
+                    {/* 타입 */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                            음원/음반
+                        </label>
+                        <div className="flex space-x-2">
+                        {(['SONG', 'ALBUM'] as const).map((type) => (
+                            <button
+                            key={type}
+                            onClick={() => setFilter(type)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                filter === type
+                                ? 'bg-[#4f46e5] text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                            >
+                            {type === 'SONG' ? '음원' : '음반'}
+                            </button>
+                        ))}
+                        </div>
+                    </div>
+
+                    {/* 국가 */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                            국내/국외
+                        </label>
+                        <div className="flex space-x-2">
+                        {(['Korea', 'FOREIGN'] as const).map((p) => (
+                        <button
+                            key={p}
+                            onClick={() => setRegion(p)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                            region === p
+                                ? 'bg-[#4f46e5] text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                        >
+                            {p === 'Korea' ? '국내음악' :  '해외음악'}
+                        </button>
+                        ))}
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div className="space-y-3">
-                {filteredProducts.map((product, index) => (
+                {products.map((product, index) => (
                     <div key={product.id} className="group bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-shadow">
                         <div className="flex items-center space-x-4">
                             <div className="shrink-0">
@@ -260,7 +318,7 @@ export const HotTracks = () => {
                         </div>
                     </div>
                 ))}
-                {filteredProducts.length !== 0 && (
+                {products.length !== 0 && (
                 <div className="flex justify-center mt-6">
                     <button
                         disabled={isLoading || products.length % size !== 0} 
@@ -271,13 +329,14 @@ export const HotTracks = () => {
                     </button>
                 </div>
             )}
-            </div>
-            {filteredProducts.length === 0 && (
+                </div>
+                {products.length === 0 && (
                 <div className="bg-white border border-gray-200 rounded-lg p-12 text-center">
                 <Flame className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">해당하는 곡이 없습니다</p>
                 </div>
             )}
-        </section>
+    </section>
+  
     );
 };
