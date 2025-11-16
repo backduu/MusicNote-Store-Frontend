@@ -102,7 +102,7 @@ export const HotTracks = () => {
                     <h1 className="text-4xl font-bold text-gray-900">Hot Tracks</h1>
                 </div>
                 <p className="text-lg text-gray-600 mb-8 text-left">
-                    지금 가장 뜨거운 음악들을 만나보세요
+                    TOP 100의 뜨거운 음악들을 만나보세요
                 </p>
             </div>
             <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
