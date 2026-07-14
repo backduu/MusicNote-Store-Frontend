@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# MusicNote-Store Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+이 프로젝트는 MusicNote-Store의 프론트엔드 서비스로, Vue 3, TypeScript, Vite를 사용하여 구축되었습니다.
 
-Currently, two official plugins are available:
+## 🛠 기술 스택
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework**: [Vue 3](https://vuejs.org/) (Composition API)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **State Management**: [Pinia](https://pinia.vuejs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Routing**: [Vue Router](https://router.vuejs.org/)
+- **HTTP Client**: [Axios](https://axios-http.com/)
 
-## React Compiler
+## 🚀 시작하기
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 설치
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 로컬 개발 서버 실행
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm run dev
 ```
+
+### 프로덕션 빌드
+
+```sh
+npm run build
+```
+
+### 린트 확인
+
+```sh
+npm run lint
+```
+
+## 📁 프로젝트 구조
+
+- `src/api`: API 통신 관련 코드
+- `src/assets`: 이미지, 스타일시트 등 정적 자산
+- `src/components`: 재사용 가능한 Vue 컴포넌트
+- `src/pages`: 페이지 컴포넌트
+- `src/router`: 라우팅 설정
+- `src/stores`: Pinia 상태 관리 스토어
+- `src/types`: TypeScript 타입 정의
