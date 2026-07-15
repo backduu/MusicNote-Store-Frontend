@@ -1,6 +1,6 @@
 import React from 'react';
-import { Header } from './Header.tsx';
-import { Footer } from './Footer.tsx';
+import { Header } from './Header.vue';
+import { Footer } from './Footer.vue';
 
 interface LayoutProps {
     children: React.ReactNode;
