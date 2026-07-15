@@ -11,7 +11,7 @@ export async function fetchNewArrivals(): Promise<Items[]> {
         price: Number(p.price),
         type: p.type,
         creator: p.creator,
-        previewUrl: p.previewUrl,
+        previewUrl: p.previewUrl || import.meta.env.VITE_DEFAULT_PREVIEW_URL,
         sellerName: p.sellerName,
         tags: p.tags,
         createdAt: p.createdAt,
