@@ -14,3 +14,9 @@ interface SearchResult {
     difficulty?: 'beginner' | 'intermediate' | 'advanced'
     previewAvailable: boolean
 }
+
+interface SearchResponse {
+    results: SearchResult[]
+}
+
+export { SearchType, SearchResult }
