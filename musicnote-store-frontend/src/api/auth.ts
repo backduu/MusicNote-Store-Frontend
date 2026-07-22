@@ -1,5 +1,3 @@
-import { UserRole } from "../types/UserRole"; 
-import { UserStatus } from "../types/UserStatus";
 import axiosInstance from "./axiosInstance";
 import type { LoginResponse } from "../types/Auth";
 export interface LoginRequest {

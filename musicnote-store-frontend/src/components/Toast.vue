@@ -7,7 +7,7 @@ interface Props {
   type: 'success' | 'fail' | 'error'
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<{
   (e: 'close'): void
 }>()

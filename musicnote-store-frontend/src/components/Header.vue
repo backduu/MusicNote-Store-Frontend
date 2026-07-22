@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Music, User, UserPlus, LogOut } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../stores/userStore'; // 경로가 stores인지 store인지 확인 필요
+import { useUserStore } from '../stores/UserStore'; // 경로 대소문자 주의
 import { storeToRefs } from 'pinia';
 
 // store 및 router init

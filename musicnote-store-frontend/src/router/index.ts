@@ -13,6 +13,21 @@ const router = createRouter({
       path: '/song-market',
       name: 'song-market',
       component: () => import('../pages/SongMarket.vue')
+    },
+    {
+      path: '/hot-tracks',
+      name: 'hot-tracks',
+      component: () => import('../pages/HotTracks.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../pages/Login.vue')
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: () => import('../pages/Signup.vue')
     }
   ]
 })

@@ -6,15 +6,16 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { fetchCarouselItems } from '../api/carousel'
-import { fetchNewArrivals } from '../api/items'
-import type { CarouselItem } from '../types/Carousel'
-import type { Items } from '../types/Product'
 import { ProductType } from '../types/ProductType'
+import { useHomeData } from '../composables/useHomeData'
 
-const carouselItems = ref<CarouselItem[]>([])
-const loading = ref(true)
-const newArrivals = ref<Items[]>([])
+const { 
+  isLoading: loading, 
+  loadHomeData, 
+  getCarouselByCategory, 
+  getNewArrivalsByCategory 
+} = useHomeData()
+
 const category = ref<ProductType>(ProductType.SONG)
 
 const albumCount = ref(15)
@@ -23,24 +24,11 @@ const sheetCount = ref(15)
 
 const modules = [Navigation, Pagination, Autoplay]
 
-onMounted(async () => {
-  try {
-    const [carouselData, newArrivalData] = await Promise.all([
-      fetchCarouselItems(),
-      fetchNewArrivals()
-    ])
-    carouselItems.value = carouselData
-    newArrivals.value = newArrivalData
-  } catch (err) {
-    console.error(err)
-  } finally {
-    loading.value = false
-  }
-})
+onMounted(loadHomeData)
 
-const audioItems = computed(() => carouselItems.value.filter((i) => i.type === ProductType.SONG))
-const albumItems = computed(() => carouselItems.value.filter((i) => i.type === ProductType.ALBUM))
-const sheetItems = computed(() => carouselItems.value.filter((i) => i.type === ProductType.SHEET))
+const audioItems = getCarouselByCategory(ProductType.SONG)
+const albumItems = getCarouselByCategory(ProductType.ALBUM)
+const sheetItems = getCarouselByCategory(ProductType.SHEET)
 
 const activeList = computed(() => {
   if (category.value === ProductType.SONG) return audioItems.value
@@ -51,15 +39,9 @@ const activeList = computed(() => {
 const slidesPerView = 3
 const shouldLoop = computed(() => activeList.value.length > slidesPerView)
 
-const newArrivalAlbums = computed(() => 
-  newArrivals.value.filter((item) => item.type === ProductType.ALBUM).slice(0, albumCount.value)
-)
-const newArrivalSongs = computed(() => 
-  newArrivals.value.filter((item) => item.type === ProductType.SONG).slice(0, songCount.value)
-)
-const newArrivalSheets = computed(() => 
-  newArrivals.value.filter((item) => item.type === ProductType.SHEET).slice(0, sheetCount.value)
-)
+const newArrivalAlbums = getNewArrivalsByCategory(ProductType.ALBUM, albumCount.value)
+const newArrivalSongs = getNewArrivalsByCategory(ProductType.SONG, songCount.value)
+const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.value)
 </script>
 
 <template>

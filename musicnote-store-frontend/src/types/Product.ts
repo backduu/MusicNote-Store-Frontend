@@ -1,5 +1,5 @@
 import type { ProductType } from '../types/ProductType';
-import type { ProductStatus } from './productStatus';
+import type { ProductStatus } from './ProductStatus';
 export interface Items {
     id: number;
     title: string;
