@@ -17,6 +17,7 @@ const handleSearch = () => {
   });
 }
 const recommendedKeywords = ['베토벤', '여름밤의 꿈', '재즈 피아노', 'K-POP 악보', '클래식 명곡'];
+const popularKeywords = ['히사이시 조', 'Love Attack', '리센느', '유다빈 밴드'];
 
 const handleKeywordClick = (keyword: string) => {
   searchQuery.value = keyword;
@@ -64,6 +65,22 @@ const handleKeywordClick = (keyword: string) => {
             class="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-sm text-gray-600 hover:border-[#4f46e5] hover:text-[#4f46e5] hover:bg-indigo-50 transition-all duration-200"
         >
           # {{ keyword }}
+        </button>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+        <span class="mr-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+          인기 검색어
+        </span>
+        <button
+          v-for="(popular, index) in popularKeywords"
+          :key="popular"
+          type="button"
+          class="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-600 transition-all duration-200 hover:border-[#4f46e5] hover:bg-indigo-50 hover:text-[#4f46e5]"
+          @click="handleKeywordClick(popular)"
+        >
+          <span class="mr-1 font-semibold text-[#4f46e5]">{{ index + 1 }}</span>
+          {{ popular }}
         </button>
       </div>
     </div>
