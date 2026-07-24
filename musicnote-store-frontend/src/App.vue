@@ -4,6 +4,7 @@ import { useRoute, RouterView } from 'vue-router';
 
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
+import GlobalSearchBar from "@/components/GlobalSearchBar.vue";
 
 const route = useRoute();
 
@@ -19,6 +20,7 @@ const isHiddenHeaderFooter = computed(() => {
 
     <!-- 상단 헤더 -->
     <Header v-if="!isHiddenHeaderFooter" />
+    <GlobalSearchBar v-if="!isHiddenHeaderFooter" />
 
     <!-- 본문 영역. -->
     <main class="flex-grow w-full">
