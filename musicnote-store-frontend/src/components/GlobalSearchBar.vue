@@ -69,9 +69,7 @@ const handleKeywordClick = (keyword: string) => {
       </div>
 
       <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
-        <span class="mr-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
-          인기 검색어
-        </span>
+        <span class="mr-2 text-xs font-semibold uppercase tracking-wider text-gray-400">인기 검색어</span>
         <button
           v-for="(popular, index) in popularKeywords"
           :key="popular"
