@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { Flame, FileMusic, Music, Disc3 } from 'lucide-vue-next'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import { ProductType } from '../types/ProductType'
 import { useHomeData } from '../composables/useHomeData'
 import heroImg from '../assets/hero/hero_section_pic.png'
+import ProductSection from "@/components/ProductSection.vue";
 
 const { 
   isLoading: loading, 
   loadHomeData, 
   getCarouselByCategory, 
-  getNewArrivalsByCategory 
+  getNewArrivalsByCategory,
+  error
 } = useHomeData()
 
 const category = ref<ProductType>(ProductType.SONG)
@@ -22,8 +19,6 @@ const category = ref<ProductType>(ProductType.SONG)
 const albumCount = ref(15)
 const songCount = ref(15)
 const sheetCount = ref(15)
-
-const modules = [Navigation, Pagination, Autoplay]
 
 onMounted(loadHomeData)
 
@@ -60,12 +55,12 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
 
       <!-- 히어로 콘텐츠 -->
       <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <div class="backdrop-blur-md bg-white/5 rounded-3xl p-10 border border-white/10 shadow-2xl">
+        <div class="backdrop-blur-md bg-white/5 rounded-3xl p-10 border border-white/20 shadow-2xl">
           <h1 class="text-3xl sm:text-4xl lg:text-4xl font-bold tracking-tighter drop-shadow-2xl mb-4">
             고요함을 찾아야 하는 시간
           </h1>
           <div class="w-16 h-1 bg-indigo-500 mx-auto mb-8 rounded-full"></div>
-          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-gray-100 font-light leading-relaxed drop-shadow-lg">
+          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-white font-light leading-relaxed drop-shadow-lg">
             당신의 마음에 스며들 이 음악 속에서
             <br />
             새로운 영감을 발견하고, 당신의 음악을 세상과 공유하세요.
@@ -83,137 +78,41 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         </div>
       </div>
     </section>
+    <!-- 아이템 섹션 -->
+    <div v-if="error" class="text-center py-16">
+      <p class="text-red-500">{{ error }}</p>
+    </div>
 
-    <!-- 오늘의 음반 -->
-    <section class="bg-white py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2">
-          <Flame class="w-6 h-6 text-red-600" />
-          오늘의 음반
-        </h2>
-        <div v-if="loading">
-          <p class="text-gray-500">로딩중...</p>
-        </div>
-        <div v-else>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div
-              v-for="item in newArrivalAlbums"
-              :key="item.id"
-              class="bg-gray-50 shadow rounded-lg overflow-hidden hover:shadow-md transition"
-            >
-              <img
-                :src="item.previewUrl"
-                :alt="item.title"
-                class="w-full h-40 object-cover"
-              />
-              <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-900">
-                  {{ item.title }}
-                </h3>
-                <p class="text-sm text-gray-600">
-                  {{ item.creator }}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="flex justify-end mt-6">
-            <router-link
-              to="/"
-              class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              더보기
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div v-else>
+      <!-- 오늘의 음반 -->
+      <ProductSection
+        title="오늘의 음반"
+        :items="newArrivalAlbums"
+        :loading="loading"
+        :type="'ALBUM'"
+        empty-message="새로운 앨범이 없습니다."
+        more-link="/albums"
+      />
 
-    <!-- 오늘의 음원 -->
-    <section class="bg-white py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2">
-          <Flame class="w-6 h-6 text-red-600" />
-          오늘의 음원
-        </h2>
-        <div v-if="loading">
-          <p class="text-gray-500">로딩중...</p>
-        </div>
-        <div v-else>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div
-              v-for="item in newArrivalSongs"
-              :key="item.id"
-              class="bg-gray-50 shadow rounded-lg overflow-hidden hover:shadow-md transition"
-            >
-              <img
-                :src="item.previewUrl"
-                :alt="item.title"
-                class="w-full h-40 object-cover"
-              />
-              <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-900">
-                  {{ item.title }}
-                </h3>
-                <p class="text-sm text-gray-600">
-                  {{ item.creator }}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="flex justify-end mt-6">
-            <router-link
-              to="/"
-              class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              더보기
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+      <!-- 오늘의 음원 -->
+      <ProductSection
+        title="오늘의 음악"
+        :items="newArrivalSongs"
+        :loading="loading"
+        :type="'SONG'"
+        empty-message="새로운 음악이 없습니다."
+        more-link="/songs"
+      />
 
-    <!-- 오늘의 악보 -->
-    <section class="bg-white py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2">
-          <Flame class="w-6 h-6 text-red-600" />
-          오늘의 악보
-        </h2>
-        <div v-if="loading">
-          <p class="text-gray-500">로딩중...</p>
-        </div>
-        <div v-else>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div
-              v-for="item in newArrivalSheets"
-              :key="item.id"
-              class="bg-gray-50 shadow rounded-lg overflow-hidden hover:shadow-md transition"
-            >
-              <img
-                :src="item.previewUrl"
-                :alt="item.title"
-                class="w-full h-40 object-cover"
-              />
-              <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-900">
-                  {{ item.title }}
-                </h3>
-                <p class="text-sm text-gray-600">
-                  {{ item.creator }}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="flex justify-end mt-6">
-            <router-link
-              to="/"
-              class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-            >
-              더보기
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+      <!-- 오늘의 악보 -->
+      <productSection
+        title="오늘의 악보"
+        :items="newArrivalSheets"
+        :loading="loading"
+        :type="'SHEET'"
+        empty-message="새로운 악보가 없습니다."
+        more-link="/scores"
+      />
+    </div>
   </div>
 </template>
