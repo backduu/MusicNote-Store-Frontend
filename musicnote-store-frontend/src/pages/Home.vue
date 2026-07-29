@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { Flame, FileMusic, Music, Disc3 } from 'lucide-vue-next'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Pagination, Autoplay } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import { ProductType } from '../types/ProductType'
 import { useHomeData } from '../composables/useHomeData'
 import heroImg from '../assets/hero/hero_section_pic.png'
@@ -14,7 +9,8 @@ const {
   isLoading: loading, 
   loadHomeData, 
   getCarouselByCategory, 
-  getNewArrivalsByCategory 
+  getNewArrivalsByCategory,
+  error
 } = useHomeData()
 
 const category = ref<ProductType>(ProductType.SONG)
@@ -125,8 +121,12 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             </router-link>
           </div>
         </div>
-        <div v-else>
-          <p class="text-gray-500">새로운 엘범이 없습니다.</p>
+        <div v-else class="py-12 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-4">
+            <Disc3 class="w-10 h-10 text-gray-300" />
+          </div>
+          <p class="text-gray-500 font-medium">새로운 앨범이 없습니다.</p>
+          <p class="text-gray-400 text-sm mt-1">곧 멋진 앨범들로 채워질 예정입니다!</p>
         </div>
       </div>
     </section>
@@ -172,8 +172,12 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             </router-link>
           </div>
         </div>
-        <div v-else-if="newArrivalSongs.length === 0">
-          <p class="text-gray-500">새로운 음악이 없습니다.</p>
+        <div v-else-if="newArrivalSongs.length === 0" class="py-12 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-4">
+            <Music class="w-10 h-10 text-gray-300" />
+          </div>
+          <p class="text-gray-500 font-medium">새로운 음악이 없습니다.</p>
+          <p class="text-gray-400 text-sm mt-1">최신 트렌드의 음악을 준비 중입니다.</p>
         </div>
       </div>
     </section>
@@ -219,8 +223,12 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             </router-link>
           </div>
         </div>
-        <div v-else>
-          <p class="text-gray-500">새로운 악보가 없습니다.</p>
+        <div v-else class="py-12 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+          <div class="bg-white p-4 rounded-full shadow-sm mb-4">
+            <FileMusic class="w-10 h-10 text-gray-300" />
+          </div>
+          <p class="text-gray-500 font-medium">새로운 악보가 없습니다.</p>
+          <p class="text-gray-400 text-sm mt-1">연주하고 싶은 곡의 악보를 조금만 기다려주세요.</p>
         </div>
       </div>
     </section>
