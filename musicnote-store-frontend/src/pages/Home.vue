@@ -60,12 +60,12 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
 
       <!-- 히어로 콘텐츠 -->
       <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <div class="backdrop-blur-md bg-white/5 rounded-3xl p-10 border border-white/10 shadow-2xl">
+        <div class="backdrop-blur-md bg-white/5 rounded-3xl p-10 border border-white/20 shadow-2xl">
           <h1 class="text-3xl sm:text-4xl lg:text-4xl font-bold tracking-tighter drop-shadow-2xl mb-4">
             고요함을 찾아야 하는 시간
           </h1>
           <div class="w-16 h-1 bg-indigo-500 mx-auto mb-8 rounded-full"></div>
-          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-gray-100 font-light leading-relaxed drop-shadow-lg">
+          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-white font-light leading-relaxed drop-shadow-lg">
             당신의 마음에 스며들 이 음악 속에서
             <br />
             새로운 영감을 발견하고, 당신의 음악을 세상과 공유하세요.
@@ -94,7 +94,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         <div v-if="loading">
           <p class="text-gray-500">로딩중...</p>
         </div>
-        <div v-else>
+        <div v-else-if="newArrivalAlbums.length !== 0">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div
               v-for="item in newArrivalAlbums"
@@ -125,6 +125,9 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             </router-link>
           </div>
         </div>
+        <div v-else>
+          <p class="text-gray-500">새로운 엘범이 없습니다.</p>
+        </div>
       </div>
     </section>
 
@@ -138,7 +141,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         <div v-if="loading">
           <p class="text-gray-500">로딩중...</p>
         </div>
-        <div v-else>
+        <div v-else-if="newArrivalSongs.length !== 0">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div
               v-for="item in newArrivalSongs"
@@ -169,6 +172,9 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             </router-link>
           </div>
         </div>
+        <div v-else-if="newArrivalSongs.length === 0">
+          <p class="text-gray-500">새로운 음악이 없습니다.</p>
+        </div>
       </div>
     </section>
 
@@ -182,7 +188,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         <div v-if="loading">
           <p class="text-gray-500">로딩중...</p>
         </div>
-        <div v-else>
+        <div v-else-if="newArrivalSheets.length !== 0">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div
               v-for="item in newArrivalSheets"
@@ -212,6 +218,9 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
               더보기
             </router-link>
           </div>
+        </div>
+        <div v-else>
+          <p class="text-gray-500">새로운 악보가 없습니다.</p>
         </div>
       </div>
     </section>
