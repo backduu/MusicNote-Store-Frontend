@@ -60,7 +60,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
             고요함을 찾아야 하는 시간
           </h1>
           <div class="w-16 h-1 bg-indigo-500 mx-auto mb-8 rounded-full"></div>
-          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-white font-light leading-relaxed drop-shadow-lg">
+          <p class="max-w-2xl mx-auto text-lg sm:text-2xl text-white font-medium leading-relaxed drop-shadow-2xl">
             당신의 마음에 스며들 이 음악 속에서
             <br />
             새로운 영감을 발견하고, 당신의 음악을 세상과 공유하세요.
@@ -90,7 +90,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         :items="newArrivalAlbums"
         :loading="loading"
         :type="'ALBUM'"
-        empty-message="새로운 앨범이 없습니다."
+        empty-message="새로운 음반이 없습니다."
         more-link="/albums"
       />
 
