@@ -96,16 +96,16 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
 
       <!-- 오늘의 음원 -->
       <ProductSection
-        title="오늘의 음악"
+        title="오늘의 음원"
         :items="newArrivalSongs"
         :loading="loading"
         :type="'SONG'"
-        empty-message="새로운 음악이 없습니다."
+        empty-message="새로운 음원이 없습니다."
         more-link="/songs"
       />
 
       <!-- 오늘의 악보 -->
-      <productSection
+      <ProductSection
         title="오늘의 악보"
         :items="newArrivalSheets"
         :loading="loading"
