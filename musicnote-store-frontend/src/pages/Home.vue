@@ -91,7 +91,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         :loading="loading"
         :type="'ALBUM'"
         empty-message="새로운 음반이 없습니다."
-        more-link="/albums"
+        more-link="/song-market"
       />
 
       <!-- 오늘의 음원 -->
@@ -101,7 +101,7 @@ const newArrivalSheets = getNewArrivalsByCategory(ProductType.SHEET, sheetCount.
         :loading="loading"
         :type="'SONG'"
         empty-message="새로운 음원이 없습니다."
-        more-link="/songs"
+        more-link="/song-market"
       />
 
       <!-- 오늘의 악보 -->
