@@ -12,8 +12,8 @@ const handleSearch = () => {
   if(!keyword) return;
 
   router.push({
-    path: `/search`,
-    query: { q: keyword }
+    path: `/global-search`,
+    query: { q : keyword }
   });
 }
 const recommendedKeywords = ['베토벤', '여름밤의 꿈', '재즈 피아노', 'K-POP 악보', '클래식 명곡'];

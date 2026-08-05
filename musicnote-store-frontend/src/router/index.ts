@@ -28,6 +28,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('../pages/Signup.vue')
+    },
+    {
+      path: '/global-search',
+      name: 'global-search',
+      component: () => import('../pages/GlobalSearchPage.vue')
     }
   ]
 })
