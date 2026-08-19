@@ -3,6 +3,7 @@ import type {Items} from "@/types/Product.ts";
 import {DiscAlbum, Disc2, Disc3, Music4} from "lucide-vue-next";
 import {ProductType} from "@/types/ProductType.ts";
 import {computed} from "vue";
+import ProductCard from "@/components/ProductCard.vue";
 
 const props = withDefaults(defineProps<{
   title: string
@@ -12,10 +13,14 @@ const props = withDefaults(defineProps<{
   emptyMessage?: string
   moreLink?: string
   error?: string
+  showMore?: boolean // 전체보기 표시 여부
+  compact?: boolean // 여백 줄일지 여부
 }>(), {
   loading: true,
   emptyMessage: '새로운 상품이 없습니다.',
   moreLink: '/',
+  showMore: true,
+  compact: false,
   error: ''
 })
 
@@ -69,38 +74,19 @@ const typeName = computed(() => {
           <span class="transition-transform group-hover:translate-x-1">→</span>
         </router-link>
       </div>
-      <div v-if="loading">
-        <p class="text-gray-500">로딩중...</p>
+
+      <!-- 로딩 및 결과 출력 -->
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-for="i in 4" :key="i" class="h-64 bg-gray-100 animate-pulse rounded-xl"></div>
       </div>
+      <!-- 아이템 출력 -->
       <div v-else-if="items.length !== 0">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-              v-for="item in items"
-              :key="item.id"
-              class="bg-gray-50 shadow rounded-lg overflow-hidden hover:shadow-md transition"
-          >
-            <img
-                :src="item.previewUrl"
-                :alt="item.title"
-                class="w-full h-40 object-cover"
-            />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-900">
-                {{ item.title }}
-              </h3>
-              <p class="text-sm text-gray-600">
-                {{ item.creator }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-center mt-12 sm:hidden">
-          <router-link
-              :to="moreLink"
-              class="px-8 py-3 bg-indigo-50 text-indigo-600 font-bold rounded-full hover:bg-indigo-100 transition"
-          >
-            전체보기
-          </router-link>
+        <div>
+          <ProductCard
+            v-for="item in items"
+            :key="item.id"
+            :item="item"
+          />
         </div>
       </div>
       <div v-else class="py-12 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
